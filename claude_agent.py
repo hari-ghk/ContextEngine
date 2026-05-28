@@ -10,8 +10,7 @@ from dotenv import load_dotenv
 import os
 import time
 from evals import evaluate_faithfulness, evaluate_answer_relevance
-
-
+from gaurdrails import validate_user_input
 
 load_dotenv()
 app = FastAPI()
@@ -44,6 +43,14 @@ class RunContext:
 
 @app.post("/ask")
 async def ask_claude(request: AgentRequest):
+    #user input validation
+    validation = validate_user_input(request.user_query)
+    if not validation["allowed"]:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Request blocked: {validation['reason']}"
+        )
+
     start = time.time()
     context = RunContext()
 
