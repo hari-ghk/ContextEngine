@@ -304,7 +304,7 @@ In a production deployment this system would add:
 
 ## Author
 
-**Harikiran** — Senior Backend Engineer transitioning into AI-first engineering  
+**Harikiran** — Senior Backend Engineer
 GitHub: [@hari-ghk](https://github.com/hari-ghk)
 
 ---
