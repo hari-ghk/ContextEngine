@@ -17,18 +17,22 @@ async def execute_python_code(code: str) -> str:
         code_file.flush()
         temp_path = code_file.name
 
-    result = subprocess.run(
-        [sys.executable, temp_path],
-        capture_output=True,
-        text=True
-    )
-    os.unlink(temp_path)
-
-    if result.returncode == 0:
-        print(f"📤 MCP output: {result.stdout}")
-        return result.stdout
-    else:
-        return f"Error: {result.stderr}"
+    try:
+        result = subprocess.run(
+            [sys.executable, temp_path],
+            capture_output=True,
+            text=True,
+            timeout=60  # kill the process if it runs longer than 10 seconds
+        )
+        if result.returncode == 0:
+            print(f"📤 MCP output: {result.stdout}")
+            return result.stdout
+        else:
+            return f"Error: {result.stderr}"
+    except subprocess.TimeoutExpired:
+        return "Error: Code execution timed out after 60 seconds"
+    finally:
+        os.unlink(temp_path)
 
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
