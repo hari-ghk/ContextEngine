@@ -5,7 +5,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 def ingest_docs(docs_path: str):
     for file in Path(docs_path).rglob("*.txt"):
         text = file.read_text(encoding="utf-8", errors="ignore")
-        splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=500)
+        splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
         chunks = splitter.split_text(text)
         for i, chunk in enumerate(chunks):
             chunk_id = f"{file}_{i}"
